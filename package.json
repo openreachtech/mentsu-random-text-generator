@@ -1,5 +1,5 @@
 {
-  "name": "@openreachtech/todo-fulfill-here",
+  "name": "@openreachtech/mentsu-random-text-generator",
   "version": "0.0.0",
   "description": "TODO: fulfill here (by npm-boilerplate@1.0.0)",
   "type": "module",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openreachtech/todo-fulfill-here.git"
+    "url": "git+https://github.com/openreachtech/mentsu-random-text-generator.git"
   },
   "author": "Open Reach Tech Inc.",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/openreachtech/todo-fulfill-here/issues"
+    "url": "https://github.com/openreachtech/mentsu-random-text-generator/issues"
   },
-  "homepage": "https://github.com/openreachtech/todo-fulfill-here#readme",
+  "homepage": "https://github.com/openreachtech/mentsu-random-text-generator#readme",
   "dependencies": {
   },
   "devDependencies": {
