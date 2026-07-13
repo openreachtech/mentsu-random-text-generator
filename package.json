@@ -1,7 +1,7 @@
 {
   "name": "@openreachtech/mentsu-random-text-generator",
   "version": "0.0.0",
-  "description": "TODO: fulfill here (by npm-boilerplate@1.0.0)",
+  "description": "Random text generator.",
   "type": "module",
   "main": "index.js",
   "files": [
