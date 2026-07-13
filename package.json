@@ -18,7 +18,7 @@
     "url": "git+https://github.com/openreachtech/mentsu-random-text-generator.git"
   },
   "author": "Open Reach Tech Inc.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/openreachtech/mentsu-random-text-generator/issues"
   },
