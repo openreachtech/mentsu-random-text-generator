@@ -100,7 +100,9 @@ describe('RandomTextGenerator', () => {
 
         test.each(eachArray)('default seeds: #%', () => {
           const generator = RandomTextGenerator.create()
-          const text = generator.generate(expectedLength)
+          const text = generator.generate({
+            length: expectedLength,
+          })
 
           expect(text)
             .toHaveLength(expectedLength)
@@ -125,7 +127,9 @@ describe('RandomTextGenerator', () => {
           const generator = RandomTextGenerator.create({
             seedString,
           })
-          const text = generator.generate(expectedLength)
+          const text = generator.generate({
+            length: expectedLength,
+          })
 
           expect(text)
             .toHaveLength(expectedLength)
