@@ -1,7 +1,7 @@
 {
   "name": "@openreachtech/mentsu-random-text-generator",
-  "version": "0.0.0",
-  "description": "TODO: fulfill here (by npm-boilerplate@1.0.0)",
+  "version": "1.0.0",
+  "description": "Random text generator.",
   "type": "module",
   "main": "index.js",
   "files": [
@@ -18,7 +18,7 @@
     "url": "git+https://github.com/openreachtech/mentsu-random-text-generator.git"
   },
   "author": "Open Reach Tech Inc.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/openreachtech/mentsu-random-text-generator/issues"
   },
@@ -27,11 +27,11 @@
   },
   "devDependencies": {
     "@openreachtech/eslint-config": "^4.4.0",
-    "@openreachtech/jest-constructor-spy": "^1.1.1",
+    "@openreachtech/jest-constructor-spy": "^1.1.2",
     "@openreachtech/jest-deep-containing": "^1.0.2",
-    "@openreachtech/jest-expect-each": "^1.0.1",
+    "@openreachtech/jest-expect-each": "^1.0.3",
     "@openreachtech/mentsu-rootpath": "^1.1.1",
-    "@openreachtech/renchan-env": "^1.0.3",
+    "@openreachtech/renchan-env": "^1.0.4",
     "@types/jest": "^30.0.0",
     "eslint": "^9.39.2",
     "jest": "^30.2.0"

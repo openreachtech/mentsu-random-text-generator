@@ -26,6 +26,7 @@ export default [
     ],
     rules: {
       'max-classes-per-file': 'off',
+      '@stylistic/array-element-newline': 'off',
     },
   },
 
