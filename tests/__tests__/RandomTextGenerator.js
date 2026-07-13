@@ -27,17 +27,19 @@ describe('RandomTextGenerator', () => {
     describe('custom seeds', () => {
       const table = [
         {
-          seeds: '0123456789',
+          seedString: '0123456789',
           expectedSeeds: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         },
         {
-          seeds: '0123456789#$%&',
+          seedString: '0123456789#$%&',
           expectedSeeds: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '#', '$', '%', '&'],
         },
       ]
 
-      test.each(table)('$seeds', ({ seeds, expectedSeeds }) => {
-        const generator = RandomTextGenerator.create(seeds)
+      test.each(table)('$seedString', ({ seedString, expectedSeeds }) => {
+        const generator = RandomTextGenerator.create({
+          seedString,
+        })
 
         expect.each(generator.seeds)
           .toBe.each(expectedSeeds)
@@ -61,17 +63,19 @@ describe('RandomTextGenerator', () => {
       describe('custom seeds', () => {
         const table = [
           {
-            seeds: '0123456789',
+            seedString: '0123456789',
             matcher: /^\d{10}$/u,
           },
           {
-            seeds: '0123456789abcdefghijklmnopqrstuvwxyz#$%&',
+            seedString: '0123456789abcdefghijklmnopqrstuvwxyz#$%&',
             matcher: /^[0-9a-z#$%&]{10}$/u,
           },
         ]
 
-        test.each(table)('$seeds', ({ seeds, matcher }) => {
-          const generator = RandomTextGenerator.create(seeds)
+        test.each(table)('$seedString', ({ seedString, matcher }) => {
+          const generator = RandomTextGenerator.create({
+            seedString,
+          })
 
           expect(generator.generate())
             .toMatch(matcher)
@@ -96,7 +100,9 @@ describe('RandomTextGenerator', () => {
 
         test.each(eachArray)('default seeds: #%', () => {
           const generator = RandomTextGenerator.create()
-          const text = generator.generate(expectedLength)
+          const text = generator.generate({
+            length: expectedLength,
+          })
 
           expect(text)
             .toHaveLength(expectedLength)
@@ -108,18 +114,22 @@ describe('RandomTextGenerator', () => {
       describe('custom seeds', () => {
         const table = [
           {
-            seeds: '0123456789',
+            seedString: '0123456789',
             matcher: new RegExp(`^\\d{${expectedLength}}$`, 'u'),
           },
           {
-            seeds: '0123456789abcdefghijklmnopqrstuvwxyz#$%&',
+            seedString: '0123456789abcdefghijklmnopqrstuvwxyz#$%&',
             matcher: new RegExp(`^[0-9a-z#$%&]{${expectedLength}}$`, 'u'),
           },
         ]
 
-        test.each(table)('$seeds', ({ seeds, matcher }) => {
-          const generator = RandomTextGenerator.create(seeds)
-          const text = generator.generate(expectedLength)
+        test.each(table)('$seedString', ({ seedString, matcher }) => {
+          const generator = RandomTextGenerator.create({
+            seedString,
+          })
+          const text = generator.generate({
+            length: expectedLength,
+          })
 
           expect(text)
             .toHaveLength(expectedLength)
