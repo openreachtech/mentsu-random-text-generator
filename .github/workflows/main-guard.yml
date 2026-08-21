@@ -17,7 +17,7 @@ jobs:
   main-guard:
     name: Main Guard
 
-    runs-on: [self-hosted, light]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Validate source branch name
