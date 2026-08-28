@@ -1,6 +1,6 @@
 {
   "name": "@openreachtech/mentsu-random-text-generator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Random text generator.",
   "type": "module",
   "main": "index.js",
@@ -18,7 +18,7 @@
     "url": "git+https://github.com/openreachtech/mentsu-random-text-generator.git"
   },
   "author": "Open Reach Tech Inc.",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/openreachtech/mentsu-random-text-generator/issues"
   },
