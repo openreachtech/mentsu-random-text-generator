@@ -103,6 +103,26 @@ generator.seeds
 // ['a', 'b', '#']
 ```
 
+### `.get:crypto`
+
+`#generate()` が抽選に使う `node:crypto` モジュールです。サブクラスで override すれば、
+別の源から抽選できます — テストで決定的な値を返す、といった用途です。`#generate()` は
+`#get:Ctor` 経由でこの getter を引くので、サブクラス側の定義が使われます。
+
+```js
+class StubbedTextGenerator extends RandomTextGenerator {
+  static get crypto () {
+    return {
+      randomInt: () => 0,
+    }
+  }
+}
+
+StubbedTextGenerator.create()
+  .generate()
+// '0000000000'（毎回、先頭のシード）
+```
+
 ## コントリビューション
 
 バグ報告・機能要望・コード貢献を歓迎します。
