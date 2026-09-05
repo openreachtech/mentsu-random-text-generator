@@ -64,6 +64,46 @@ describe('RandomTextGenerator', () => {
 })
 
 describe('RandomTextGenerator', () => {
+  describe('#get:Ctor', () => {
+    class AlphaRandomTextGenerator extends RandomTextGenerator {}
+
+    class BetaRandomTextGenerator extends RandomTextGenerator {}
+
+    describe('should be constructor of instance', () => {
+      const cases = [
+        {
+          input: {
+            Generator: RandomTextGenerator,
+          },
+          expected: RandomTextGenerator,
+        },
+        {
+          input: {
+            Generator: AlphaRandomTextGenerator,
+          },
+          expected: AlphaRandomTextGenerator,
+        },
+        {
+          input: {
+            Generator: BetaRandomTextGenerator,
+          },
+          expected: BetaRandomTextGenerator,
+        },
+      ]
+
+      test.each(cases)('Generator: $input.Generator.name', ({ input, expected }) => {
+        const generator = input.Generator.create()
+
+        const received = generator.Ctor
+
+        expect(received)
+          .toBe(expected) // same reference
+      })
+    })
+  })
+})
+
+describe('RandomTextGenerator', () => {
   describe('#generate()', () => {
     describe('default length (10)', () => {
       describe('default seeds [0-9A-Za-z]', () => {
