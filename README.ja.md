@@ -72,6 +72,13 @@ RandomTextGenerator.create({ seedString })
 
 シード文字集合から文字を選び、ランダムな文字列を生成します。
 
+1 文字ごとの抽出には `node:crypto` の
+[`crypto.randomInt()`](https://nodejs.org/api/crypto.html#cryptorandomintmax-callback)
+を使います。そのため、推測されないことが存在意義であるような値
+— 仮パスワード、OAuth の `state` パラメーター — にそのまま使えます。
+また、どのシードも等確率です。`randomInt()` はシード数で剰余を取らず、
+範囲外を引いたら引き直します。剰余では先頭の数文字が他より出やすくなります。
+
 ```js
 generator.generate({ length })
 ```
@@ -94,6 +101,26 @@ const generator = RandomTextGenerator.create({
 
 generator.seeds
 // ['a', 'b', '#']
+```
+
+### `.get:crypto`
+
+`#generate()` が抽選に使う `node:crypto` モジュールです。サブクラスで override すれば、
+別の源から抽選できます — テストで決定的な値を返す、といった用途です。`#generate()` は
+`#get:Ctor` 経由でこの getter を引くので、サブクラス側の定義が使われます。
+
+```js
+class StubbedTextGenerator extends RandomTextGenerator {
+  static get crypto () {
+    return {
+      randomInt: () => 0,
+    }
+  }
+}
+
+StubbedTextGenerator.create()
+  .generate()
+// '0000000000'（毎回、先頭のシード）
 ```
 
 ## コントリビューション
