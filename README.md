@@ -103,6 +103,26 @@ generator.seeds
 // ['a', 'b', '#']
 ```
 
+### `.get:crypto`
+
+The `node:crypto` module `#generate()` draws through. Override it in a subclass to
+draw from a different source — a deterministic one in a test, say. `#generate()`
+reaches the getter through `#get:Ctor`, so a subclass's own is the one that answers.
+
+```js
+class StubbedTextGenerator extends RandomTextGenerator {
+  static get crypto () {
+    return {
+      randomInt: () => 0,
+    }
+  }
+}
+
+StubbedTextGenerator.create()
+  .generate()
+// '0000000000' (the first seed, every time)
+```
+
 ## Contribution
 
 Bug reports, feature requests, and code contributions are welcome.
