@@ -1,3 +1,5 @@
+import crypto from 'node:crypto'
+
 import RandomTextGenerator from '../../lib/RandomTextGenerator.js'
 
 const eachArray = [...Array(5)]
@@ -43,6 +45,59 @@ describe('RandomTextGenerator', () => {
 
         expect.each(generator.seeds)
           .toBe.each(expectedSeeds)
+      })
+    })
+  })
+})
+
+describe('RandomTextGenerator', () => {
+  describe('.get:crypto', () => {
+    describe('when called as is', () => {
+      test('should be fixed value', () => {
+        const received = RandomTextGenerator.crypto
+
+        expect(received)
+          .toBe(crypto) // same reference
+      })
+    })
+  })
+})
+
+describe('RandomTextGenerator', () => {
+  describe('#get:Ctor', () => {
+    class AlphaRandomTextGenerator extends RandomTextGenerator {}
+
+    class BetaRandomTextGenerator extends RandomTextGenerator {}
+
+    describe('should be constructor of instance', () => {
+      const cases = [
+        {
+          input: {
+            Generator: RandomTextGenerator,
+          },
+          expected: RandomTextGenerator,
+        },
+        {
+          input: {
+            Generator: AlphaRandomTextGenerator,
+          },
+          expected: AlphaRandomTextGenerator,
+        },
+        {
+          input: {
+            Generator: BetaRandomTextGenerator,
+          },
+          expected: BetaRandomTextGenerator,
+        },
+      ]
+
+      test.each(cases)('Generator: $input.Generator.name', ({ input, expected }) => {
+        const generator = input.Generator.create()
+
+        const received = generator.Ctor
+
+        expect(received)
+          .toBe(expected) // same reference
       })
     })
   })
@@ -136,6 +191,214 @@ describe('RandomTextGenerator', () => {
           expect(text)
             .toMatch(matcher)
         })
+      })
+    })
+  })
+})
+
+describe('RandomTextGenerator', () => {
+  describe('#generate()', () => {
+    describe('when crypto.randomInt() is called three times', () => {
+      const cases = [
+        {
+          override: {
+            drawnIndex: 3,
+          },
+          input: {
+            seedString: '0123456789',
+            length: 3,
+          },
+          expected: {
+            seedsLength: 10,
+            text: '333',
+          },
+        },
+        {
+          override: {
+            drawnIndex: 25,
+          },
+          input: {
+            seedString: 'abcdefghijklmnopqrstuvwxyz',
+            length: 3,
+          },
+          expected: {
+            seedsLength: 26,
+            text: 'zzz',
+          },
+        },
+      ]
+
+      test.each(cases)('seedString: $input.seedString', ({ override, input, expected }) => {
+        const randomIntSpy = jest.spyOn(crypto, 'randomInt')
+          .mockReturnValue(override.drawnIndex)
+
+        const createArgs = {
+          seedString: input.seedString,
+        }
+        const generator = RandomTextGenerator.create(createArgs)
+        const generateArgs = {
+          length: input.length,
+        }
+
+        const received = generator.generate(generateArgs)
+
+        expect(randomIntSpy)
+          .toHaveBeenCalledTimes(3)
+        // The seed count is the whole of the argument: the draw is bounded, never reduced.
+        expect(randomIntSpy)
+          .toHaveBeenNthCalledWith(1, expected.seedsLength)
+        expect(randomIntSpy)
+          .toHaveBeenNthCalledWith(2, expected.seedsLength)
+        expect(randomIntSpy)
+          .toHaveBeenNthCalledWith(3, expected.seedsLength)
+        // The drawn value indexes the seeds as it stands.
+        expect(received)
+          .toBe(expected.text)
+      })
+    })
+
+    describe('when crypto.randomInt() is called twice', () => {
+      const cases = [
+        {
+          override: {
+            drawnIndex: 2,
+          },
+          input: {
+            seedString: '#$%&',
+            length: 2,
+          },
+          expected: {
+            seedsLength: 4,
+            text: '%%',
+          },
+        },
+        {
+          override: {
+            drawnIndex: 7,
+          },
+          input: {
+            seedString: 'ABCDEFGHIJKL',
+            length: 2,
+          },
+          expected: {
+            seedsLength: 12,
+            text: 'HH',
+          },
+        },
+      ]
+
+      test.each(cases)('seedString: $input.seedString', ({ override, input, expected }) => {
+        const randomIntSpy = jest.spyOn(crypto, 'randomInt')
+          .mockReturnValue(override.drawnIndex)
+
+        const createArgs = {
+          seedString: input.seedString,
+        }
+        const generator = RandomTextGenerator.create(createArgs)
+        const generateArgs = {
+          length: input.length,
+        }
+
+        const received = generator.generate(generateArgs)
+
+        expect(randomIntSpy)
+          .toHaveBeenCalledTimes(2)
+        expect(randomIntSpy)
+          .toHaveBeenNthCalledWith(1, expected.seedsLength)
+        expect(randomIntSpy)
+          .toHaveBeenNthCalledWith(2, expected.seedsLength)
+        expect(received)
+          .toBe(expected.text)
+      })
+    })
+
+    describe('when crypto.randomInt() is called once', () => {
+      const cases = [
+        {
+          override: {
+            drawnIndex: 0,
+          },
+          input: {
+            seedString: 'xyz',
+            length: 1,
+          },
+          expected: {
+            seedsLength: 3,
+            text: 'x',
+          },
+        },
+        {
+          override: {
+            drawnIndex: 4,
+          },
+          input: {
+            seedString: '01234',
+            length: 1,
+          },
+          expected: {
+            seedsLength: 5,
+            text: '4',
+          },
+        },
+      ]
+
+      test.each(cases)('seedString: $input.seedString', ({ override, input, expected }) => {
+        const randomIntSpy = jest.spyOn(crypto, 'randomInt')
+          .mockReturnValue(override.drawnIndex)
+
+        const createArgs = {
+          seedString: input.seedString,
+        }
+        const generator = RandomTextGenerator.create(createArgs)
+        const generateArgs = {
+          length: input.length,
+        }
+
+        const received = generator.generate(generateArgs)
+
+        expect(randomIntSpy)
+          .toHaveBeenCalledTimes(1)
+        expect(randomIntSpy)
+          .toHaveBeenNthCalledWith(1, expected.seedsLength)
+        expect(received)
+          .toBe(expected.text)
+      })
+    })
+
+    describe('when crypto.randomInt() is not called', () => {
+      const cases = [
+        {
+          input: {
+            seedString: 'pqrstu',
+            length: 0,
+          },
+        },
+        {
+          input: {
+            seedString: '567',
+            length: 0,
+          },
+        },
+      ]
+
+      test.each(cases)('seedString: $input.seedString', ({ input }) => {
+        const randomIntSpy = jest.spyOn(crypto, 'randomInt')
+
+        const createArgs = {
+          seedString: input.seedString,
+        }
+        const generator = RandomTextGenerator.create(createArgs)
+        const generateArgs = {
+          length: input.length,
+        }
+
+        const received = generator.generate(generateArgs)
+
+        expect(randomIntSpy)
+          .not
+          .toHaveBeenCalled()
+        expect(received)
+          .toBe('')
       })
     })
   })

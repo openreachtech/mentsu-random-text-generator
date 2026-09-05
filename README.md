@@ -72,6 +72,13 @@ Returns a `RandomTextGenerator` instance.
 
 Generates a random string by picking characters from the seed set.
 
+Each character is drawn with [`crypto.randomInt()`](https://nodejs.org/api/crypto.html#cryptorandomintmax-callback)
+from `node:crypto`, so the output is safe for values whose whole purpose is that
+they cannot be guessed — a temporary password, an OAuth `state` parameter. Every
+seed is equally likely: `randomInt()` rejects and redraws rather than reducing a
+byte modulo the seed count, which would make the first few seeds more likely
+than the rest.
+
 ```js
 generator.generate({ length })
 ```
@@ -94,6 +101,26 @@ const generator = RandomTextGenerator.create({
 
 generator.seeds
 // ['a', 'b', '#']
+```
+
+### `.get:crypto`
+
+The `node:crypto` module `#generate()` draws through. Override it in a subclass to
+draw from a different source — a deterministic one in a test, say. `#generate()`
+reaches the getter through `#get:Ctor`, so a subclass's own is the one that answers.
+
+```js
+class StubbedTextGenerator extends RandomTextGenerator {
+  static get crypto () {
+    return {
+      randomInt: () => 0,
+    }
+  }
+}
+
+StubbedTextGenerator.create()
+  .generate()
+// '0000000000' (the first seed, every time)
 ```
 
 ## Contribution
