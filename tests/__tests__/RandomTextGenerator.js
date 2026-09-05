@@ -1,3 +1,5 @@
+import crypto from 'node:crypto'
+
 import RandomTextGenerator from '../../lib/RandomTextGenerator.js'
 
 const eachArray = [...Array(5)]
@@ -43,6 +45,19 @@ describe('RandomTextGenerator', () => {
 
         expect.each(generator.seeds)
           .toBe.each(expectedSeeds)
+      })
+    })
+  })
+})
+
+describe('RandomTextGenerator', () => {
+  describe('.get:crypto', () => {
+    describe('when called as is', () => {
+      test('should be fixed value', () => {
+        const received = RandomTextGenerator.crypto
+
+        expect(received)
+          .toBe(crypto) // same reference
       })
     })
   })
